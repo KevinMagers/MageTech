@@ -1,0 +1,63 @@
+package co.magetech;
+
+import java.io.File;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.ModClassLoader;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraft.block.Block;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ServerCommand;
+import net.minecraft.command.ServerCommandManager;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.config.Configuration;
+import micdoodle8.mods.galacticraft.api.event.oxygen.GCCoreOxygenSuffocationEvent;
+
+
+
+
+//@Mod(useMetadata = true, modid = "YourModID", dependencies = "required-after:GalacticraftCore;)"
+@Mod(modid = "magetech", name = "mageTechMod", version = "1.2", acceptableRemoteVersions = "*", useMetadata = true)
+public class Main {
+	
+	@EventHandler
+	public void cancelSuffocation(GCCoreOxygenSuffocationEvent event) 
+	{
+		event.setCanceled(true);
+	}
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) 
+	{
+		///PermissionManager.registerPermission("magetech.testperm", level);
+		String configDir = event.getModConfigurationDirectory().toString();
+		configHandler.init(configDir);
+		FMLCommonHandler.instance().bus().register(new configHandler());
+		MinecraftServer.getServer().logInfo("PreInit Complete!");
+	}
+	@EventHandler
+	public void init(FMLInitializationEvent event) 
+	{
+		MinecraftServer.getServer().logInfo("Init Complete!");
+	}
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) 
+	{
+		MinecraftServer.getServer().logInfo("PostInit Complete!");
+	}
+	@EventHandler
+	public static void init(FMLServerStartingEvent event)
+	{
+		event.registerServerCommand(new cmd());
+	}
+
+
+}

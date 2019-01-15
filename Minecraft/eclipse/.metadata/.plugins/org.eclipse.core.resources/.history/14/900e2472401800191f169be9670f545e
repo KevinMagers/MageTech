@@ -1,0 +1,59 @@
+package micdoodle8.mods.galacticraft.planets.asteroids.items;
+
+import micdoodle8.mods.galacticraft.core.GCBlocks;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.util.EnumColor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.BlockWalkway;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+
+public class ItemBlockWalkway extends ItemBlockDesc
+{
+    public ItemBlockWalkway(Block block)
+    {
+        super(block);
+        this.setMaxDamage(0);
+        this.setHasSubtypes(true);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> tooltip, boolean advanced)
+    {
+        if (itemStack.getItemDamage() == BlockWalkway.EnumWalkwayType.WALKWAY_WIRE.getMeta())
+        {
+            tooltip.add(EnumColor.AQUA + GCCoreUtil.translate("tile.aluminum_wire.alu_wire.name"));
+        }
+        else if (itemStack.getItemDamage() == BlockWalkway.EnumWalkwayType.WALKWAY_PIPE.getMeta())
+        {
+            tooltip.add(EnumColor.AQUA + GCCoreUtil.translate(GCBlocks.oxygenPipe.getUnlocalizedName() + ".name"));
+        }
+
+        super.addInformation(itemStack, entityPlayer, tooltip, advanced);
+    }
+
+    @Override
+    public int getMetadata(int meta)
+    {
+        return meta;
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack itemstack)
+    {
+        String name = BlockWalkway.EnumWalkwayType.values()[itemstack.getItemDamage()].getName();
+        return this.getBlock().getUnlocalizedName() + "." + name;
+    }
+
+    @Override
+    public String getUnlocalizedName()
+    {
+        return this.getBlock().getUnlocalizedName() + ".0";
+    }
+}
